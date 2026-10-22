@@ -1,0 +1,11 @@
+# Benchmark data and run outputs live outside git.
+data/
+runs/
+logs/
+
+.env
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.DS_Store

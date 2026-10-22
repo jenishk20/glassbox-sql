@@ -1,0 +1,25 @@
+[project]
+name = "glassbox-sql"
+version = "0.1.0"
+description = "Evaluate and post-train text-to-SQL models on BIRD, with every number traceable to a per-question record."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = ["openai>=1.40"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+verify = ["func_timeout>=4.3"]   # only for `glassbox verify-official` (BIRD's script needs it)
+
+[project.scripts]
+glassbox = "glassbox.cli:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/glassbox"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
