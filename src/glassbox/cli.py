@@ -114,14 +114,21 @@ def cmd_run(a) -> None:
             sent = {"system": p.system, "user": p.user} if a.format == "chat" else {"user": p.completion_text()}
             f.write(json.dumps({"idx": e.idx, **sent}, ensure_ascii=False) + "\n")
 
-    client = None if a.endpoint == "gold" else make_client(a.endpoint, a.base_url)
-    if client is not None:
-        meta["server"] = server_info(client, a.endpoint)
     meta_path.write_text(json.dumps(meta, indent=2))
-
-    workers = a.workers or (64 if a.endpoint == "local" else 16)
-    run_generation(examples, prompts, client, a.endpoint, a.model, a.format, dec,
-                   run_dir / "generations.jsonl", workers)
+    if a.endpoint == "hf":
+        from .hf_local import run_generation_hf
+        engine = run_generation_hf(examples, prompts, a.model, a.format, dec,
+                                   run_dir / "generations.jsonl", a.batch_size)
+        if engine:
+            meta["server"] = engine
+    else:
+        client = None if a.endpoint == "gold" else make_client(a.endpoint, a.base_url)
+        if client is not None:
+            meta["server"] = server_info(client, a.endpoint)
+        workers = a.workers or (64 if a.endpoint == "local" else 16)
+        run_generation(examples, prompts, client, a.endpoint, a.model, a.format, dec,
+                       run_dir / "generations.jsonl", workers)
+    meta_path.write_text(json.dumps(meta, indent=2))
     score_run(run_dir, examples, bird_dir, meta, RUNS_DIR / ".cache", a.score_workers)
     print()
     print_table([run_dir])
@@ -225,6 +232,7 @@ def main(argv: list[str] | None = None) -> None:
     r.add_argument("--tag", help="extra label for the run name, e.g. 4bit")
     r.add_argument("--name", help="explicit run name")
     r.add_argument("--workers", type=int, help="parallel requests (default 64 local, 16 W&B)")
+    r.add_argument("--batch-size", type=int, default=16, help="questions per GPU batch (--endpoint hf)")
     r.add_argument("--score-workers", type=int, default=16)
     r.set_defaults(func=cmd_run)
 

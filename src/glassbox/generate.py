@@ -1,6 +1,7 @@
-"""Ask a model for SQL. One code path for every model, through an OpenAI-compatible API:
+"""Ask a model for SQL. Four endpoints:
 
-  local  a vLLM server on the cluster (`vllm serve <model> --generation-config vllm`)
+  hf     the model runs right here on the GPU with transformers (see hf_local.py)
+  local  a vLLM server (`vllm serve <model> --generation-config vllm`), optional and faster
   wandb  W&B Inference (frontier and open models)
   gold   no model at all: answers with the gold SQL, to check data loading and scoring
 
@@ -25,6 +26,7 @@ from .data import Example
 from .prompts import Prompt
 
 ENDPOINTS = {
+    "hf": {"base_url": None, "key_env": None},
     "local": {"base_url": "http://localhost:8000/v1", "key_env": None},
     "wandb": {"base_url": "https://api.inference.wandb.ai/v1", "key_env": "WANDB_API_KEY"},
     "gold": {"base_url": None, "key_env": None},
@@ -73,7 +75,8 @@ def server_info(client, endpoint: str) -> dict:
         info["models_error"] = repr(e)
     if endpoint == "local":
         import urllib.request
-        root = str(client.base_url).rstrip("/").removesuffix("/v1")
+        root = str(client.base_url).rstrip("/")
+        root = root[:-3] if root.endswith("/v1") else root
         try:
             with urllib.request.urlopen(f"{root}/version", timeout=10) as r:
                 info["vllm_version"] = json.loads(r.read()).get("version")
@@ -140,19 +143,27 @@ def generate_one(client, endpoint: str, model: str, fmt: str, prompt: Prompt,
     return {"samples": samples, "usage": usage}
 
 
+def already_done(out_path: Path) -> tuple[set[int], int]:
+    """Questions with a good answer in out_path, and how many failed last time.
+
+    A question asked again gets a new line; readers keep the last line per question.
+    """
+    if not out_path.exists():
+        return set(), 0
+    latest = {}
+    for line in out_path.open():
+        if line.strip():
+            rec = json.loads(line)
+            latest[rec["idx"]] = rec
+    done = {i for i, rec in latest.items() if not any(s.get("error") for s in rec["samples"])}
+    return done, len(latest) - len(done)
+
+
 def run_generation(examples: list[Example], prompts: dict[int, Prompt], client, endpoint: str,
                    model: str, fmt: str, dec: Decoding, out_path: Path, workers: int) -> None:
     """Append one JSON line per question to out_path. Re-running resumes where it stopped,
     and asks again any question whose request failed (the new line replaces the old one)."""
-    done, failed_before = set(), 0
-    if out_path.exists():
-        latest = {}
-        for line in out_path.open():
-            if line.strip():
-                rec = json.loads(line)
-                latest[rec["idx"]] = rec
-        done = {i for i, rec in latest.items() if not any(s.get("error") for s in rec["samples"])}
-        failed_before = len(latest) - len(done)
+    done, failed_before = already_done(out_path)
     todo = [e for e in examples if e.idx not in done]
     if not todo:
         print(f"generation: all {len(examples)} questions already done")
@@ -173,7 +184,8 @@ def run_generation(examples: list[Example], prompts: dict[int, Prompt], client, 
                 finished += 1
                 failures += all(s.get("error") for s in rec["samples"])
                 if finished == 10 and failures == 10:
-                    pool.shutdown(cancel_futures=True)
+                    for pending in futures:
+                        pending.cancel()
                     raise SystemExit("The first 10 questions all failed; check the model id and endpoint:\n"
                                      + rec["samples"][0]["error"])
                 if finished % 50 == 0 or finished == len(todo):

@@ -3,7 +3,7 @@ name = "glassbox-sql"
 version = "0.1.0"
 description = "Evaluate and post-train text-to-SQL models on BIRD, with every number traceable to a per-question record."
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.8"
 dependencies = ["openai>=1.40"]
 
 [project.optional-dependencies]

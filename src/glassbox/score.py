@@ -113,6 +113,11 @@ def _vote(scored: list[dict], results: list[ExecResult | None]) -> int | None:
 
 def score_run(run_dir: Path, examples: list[Example], bird_dir: Path, meta: dict,
               cache_dir: Path, workers: int = 16) -> dict:
+    import sqlite3
+    if sqlite3.sqlite_version_info < (3, 25, 0):
+        print(f"WARNING: this Python uses SQLite {sqlite3.sqlite_version}, older than 3.25, which cannot "
+              "run window functions (RANK() OVER ...). Correct answers using them would be marked wrong. "
+              "Copy the run folder to a newer machine and run `glassbox score` there.", flush=True)
     gens = {}
     for line in (run_dir / "generations.jsonl").open():
         if line.strip():

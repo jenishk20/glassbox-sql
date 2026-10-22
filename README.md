@@ -100,67 +100,62 @@ uv run python -m glassbox run --endpoint wandb --model <model-id> --limit 5   # 
 uv run python -m glassbox run --endpoint wandb --model <model-id>             # the full split
 ```
 
-### On your own GPU (any machine with vLLM)
+### On your own GPU
 
-Start a server, then point glassbox at it. `--generation-config vllm` stops vLLM from silently applying
-the model's own default sampling settings.
+The simplest way needs only PyTorch and Hugging Face `transformers`: glassbox loads the model itself and
+generates in batches. Every generation setting is set explicitly, so nothing is inherited from the
+model's own config (Qwen2.5-Coder-7B-Instruct's config turns on sampling with `repetition_penalty: 1.1`).
 
 ```bash
-vllm serve Qwen/Qwen2.5-Coder-7B-Instruct --dtype bfloat16 --max-model-len 16384 --generation-config vllm --seed 0
-uv run python -m glassbox run --endpoint local --model Qwen/Qwen2.5-Coder-7B-Instruct --format chat
+pip install torch==2.4.1 transformers==4.46.3
+PYTHONPATH=src python -m glassbox run --endpoint hf --model Qwen/Qwen2.5-Coder-7B-Instruct --format chat
 ```
 
 Base models are not chat models, so they get the prompt as plain text with the SQL fence already opened:
-add `--format completion`.
+add `--format completion`. If you already have a [vLLM](https://docs.vllm.ai/) server running, use
+`--endpoint local` instead (faster for many samples per question).
 
 ### On a SLURM cluster (how Part 2 was run)
 
-We never `pip install` vLLM on the cluster. Installing it into a shared Python environment is where
-version conflicts come from. Instead, everything runs inside vLLM's official container image (a single
-file that already has vLLM, PyTorch, CUDA libraries and Python), through Apptainer. glassbox only needs
-Python and `openai`, which the image already has.
+The GPU side needs only a Python 3.8+ virtual environment with `torch` and `transformers`. The repo is not
+pip-installed there; jobs run it with `PYTHONPATH=src`.
 
-**One-time setup, on a login node** (if your cluster needs a proxy for internet access, set
-`https_proxy` and `http_proxy` first; if `apptainer` is not found, try `module load apptainer`):
+**One-time setup, in an interactive shell on the cluster** (the proxy line is only needed if your
+cluster reaches the internet through one):
 
 ```bash
-WORK=/scratch/$USER/glassbox && mkdir -p $WORK && cd $WORK
-git clone https://github.com/jenishk20/glassbox-sql
-export APPTAINER_CACHEDIR=$WORK/apptainer-cache APPTAINER_TMPDIR=$WORK/apptainer-tmp
-mkdir -p $APPTAINER_CACHEDIR $APPTAINER_TMPDIR
+cd /scratch/$USER && git clone https://github.com/jenishk20/glassbox-sql
+python3 -m venv /scratch/$USER/glassbox_env
+source /scratch/$USER/glassbox_env/bin/activate
+export https_proxy=http://<proxy>:<port> http_proxy=http://<proxy>:<port>
+pip install --upgrade pip && pip install torch==2.4.1 transformers==4.46.3
 
-# 1. The container (pinned version; the -cu129 build works with older GPU drivers than the default)
-apptainer pull $WORK/vllm-openai-v0.31.0-cu129.sif docker://vllm/vllm-openai:v0.31.0-x86_64-cu129
+# Model weights (GPU nodes may have no internet, so download them here)
+export HF_HOME=/scratch/$USER/hf_cache
+python -c "from huggingface_hub import snapshot_download as d; d('Qwen/Qwen2.5-Coder-7B-Instruct'); d('Qwen/Qwen2.5-Coder-7B')"
 
-# 2. Model weights (GPU nodes may have no internet, so download them here)
-for m in Qwen/Qwen2.5-Coder-7B-Instruct Qwen/Qwen2.5-Coder-7B; do
-  apptainer exec --cleanenv --env HF_HOME=$WORK/hf,https_proxy=${https_proxy:-} \
-    $WORK/vllm-openai-v0.31.0-cu129.sif \
-    python3 -c "from huggingface_hub import snapshot_download as d; print(d('$m'))"
-done
-
-# 3. BIRD dev and dev-1106
-cd glassbox-sql
-bash scripts/get_bird_dev.sh
-apptainer exec --cleanenv --env PYTHONPATH=src,https_proxy=${https_proxy:-} \
-  $WORK/vllm-openai-v0.31.0-cu129.sif python3 -m glassbox fetch-dev1106
+# BIRD dev and dev-1106
+cd /scratch/$USER/glassbox-sql && bash scripts/get_bird_dev.sh /scratch/$USER/bird_dev
+curl -L -o /scratch/$USER/bird_dev/dev_20240627/dev_20251106.json \
+  https://huggingface.co/datasets/birdsql/bird_sql_dev_20251106/resolve/main/data/dev_20251106-00000-of-00001.json
 ```
 
-**Check, then run** (from the repo folder; edit the paths at the top of each job file if yours differ):
+**Check, then run.** The job files use `/scratch/$USER/...` paths, `--partition=gpu` and one H200; edit
+the `#SBATCH` lines if your cluster differs.
 
 ```bash
-mkdir -p logs
-sbatch scripts/slurm/check.sbatch        # ~10 min; must end with "ALL CHECKS PASSED"
+sbatch scripts/slurm/check.sbatch        # ~10 min, 20 questions per model; must end with "ALL CHECKS PASSED"
 sbatch scripts/slurm/part2_qwen.sbatch   # Part 2: Base and Instruct on dev and dev-1106
 ```
 
-If the check fails at step 2 with a CUDA error, the cluster's GPU driver is older than the container's
-CUDA version (`nvidia-smi` in the log shows the driver). Pull an older vLLM release and try again.
+Logs go to `/scratch/$USER/glassbox_check_<job>.out` and `glassbox_part2_<job>.out`. The check prints
+the cluster's SQLite version: below 3.25, window functions (`RANK() OVER ...`) fail, so copy the run
+folders to a newer machine and run `glassbox score` there.
 
-Copy the results to your own computer to read them:
+Copy the results to your own computer to read them (`/scratch` may be purged):
 
 ```bash
-rsync -av <cluster>:/scratch/<user>/glassbox/glassbox-sql/runs/ runs/
+rsync -av <cluster>:/scratch/<user>/glassbox-sql/runs/ runs/
 ```
 
 ## Reading results
@@ -242,13 +237,19 @@ No system message is sent with the ladder prompts, so a chat model's template ma
 The code is MIT licensed. BIRD is distributed by its authors under CC BY-SA 4.0 and is not included
 here; published run folders contain BIRD text and are shared under CC BY-SA 4.0 as well.
 
-## Citation
+## Credit to BIRD
+
+This project evaluates on BIRD, built by the authors below. If you use BIRD or results from this repo,
+please cite their paper (entry copied from
+[BIRD's official README](https://github.com/AlibabaResearch/DAMO-ConvAI/tree/main/bird)):
 
 ```bibtex
-@inproceedings{li2023bird,
-  title     = {Can LLM Already Serve as A Database Interface? A BIg Bench for Large-Scale Database Grounded Text-to-SQLs},
-  author    = {Li, Jinyang and Hui, Binyuan and Qu, Ge and Yang, Jiaxi and Li, Binhua and Li, Bowen and Wang, Bailin and Qin, Bowen and Geng, Ruiying and Huo, Nan and others},
-  booktitle = {Advances in Neural Information Processing Systems},
-  year      = {2023}
+@misc{li2023llm,
+  title={Can LLM Already Serve as A Database Interface? A BIg Bench for Large-Scale Database Grounded Text-to-SQLs},
+  author={Jinyang Li and Binyuan Hui and Ge Qu and Binhua Li and Jiaxi Yang and Bowen Li and Bailin Wang and Bowen Qin and Ruiying Geng and Nan Huo and Xuanhe Zhou and Chenhao Ma and Guoliang Li and Kevin C. C. Chang and Fei Huang and Reynold Cheng and Yongbin Li},
+  year={2023},
+  eprint={2305.03111},
+  archivePrefix={arXiv},
+  primaryClass={cs.CL}
 }
 ```
