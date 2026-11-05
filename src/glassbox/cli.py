@@ -24,7 +24,8 @@ from pathlib import Path
 
 from . import __version__
 from .data import SPLITS, fetch_dev1106, load_split
-from .generate import ENDPOINTS, Decoding, decoding_dict, make_client, run_generation, server_info, slug
+from .generate import (ENDPOINTS, Decoding, decoding_dict, make_client, reuse_answers, run_generation,
+                       server_info, slug)
 from .prompts import PROMPTS, build
 from .report import compare, print_breakdown, print_table, write_traces
 from .score import score_run
@@ -114,6 +115,11 @@ def cmd_run(a) -> None:
             sent = {"system": p.system, "user": p.user} if a.format == "chat" else {"user": p.completion_text()}
             f.write(json.dumps({"idx": e.idx, **sent}, ensure_ascii=False) + "\n")
 
+    if a.reuse_from:
+        meta["reused_from"] = reuse_answers(Path(a.reuse_from), meta, run_dir / "generations.jsonl")
+        r = meta["reused_from"]
+        print(f"reused {r['copied']} answers from {r['run']}; asking {len(r['asked_again'])} again "
+              f"with max_tokens {max_tokens}", flush=True)
     meta_path.write_text(json.dumps(meta, indent=2))
     if a.endpoint == "hf":
         from .hf_local import run_generation_hf
@@ -229,6 +235,8 @@ def main(argv: list[str] | None = None) -> None:
     r.add_argument("--n", type=int, default=1, help="samples per question (for majority vote / pass@k)")
     r.add_argument("--repetition-penalty", type=float, help="only to reproduce v1 (it used 1.1)")
     r.add_argument("--limit", type=int, help="first N questions only (smoke tests)")
+    r.add_argument("--reuse-from", help="earlier run with a smaller --max-tokens: copy its finished answers, "
+                                        "ask again only the ones it cut off")
     r.add_argument("--tag", help="extra label for the run name, e.g. 4bit")
     r.add_argument("--name", help="explicit run name")
     r.add_argument("--workers", type=int, help="parallel requests (default 64 local, 16 W&B)")

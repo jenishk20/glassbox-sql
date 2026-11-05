@@ -159,6 +159,36 @@ def already_done(out_path: Path) -> tuple[set[int], int]:
     return done, len(latest) - len(done)
 
 
+def reuse_answers(old_dir: Path, meta: dict, out_path: Path) -> dict:
+    """Copy answers from an earlier run that used a smaller max_tokens, except the ones cut off
+    by it, so only those are asked again. A bigger budget only matters for an answer that hit the
+    limit, so the result counts as a full run with the new budget."""
+    old = json.loads((old_dir / "meta.json").read_text())
+    for k in ("model", "endpoint", "format", "prompt", "dataset", "limit"):
+        if old.get(k) != meta.get(k):
+            raise SystemExit(f"--reuse-from: {old_dir} has a different {k}")
+    od, nd = old["decoding"], meta["decoding"]
+    if any(od[k] != nd[k] for k in ("temperature", "top_p", "n", "repetition_penalty")) or nd["temperature"] != 0:
+        raise SystemExit("--reuse-from needs the same greedy decoding settings (temperature 0)")
+    if od["max_tokens"] >= nd["max_tokens"]:
+        raise SystemExit("--reuse-from is for re-asking cut-off answers with a bigger --max-tokens")
+
+    latest = {}
+    for line in (old_dir / "generations.jsonl").open():
+        if line.strip():
+            rec = json.loads(line)
+            latest[rec["idx"]] = rec
+    keep = {i: r for i, r in latest.items()
+            if not any(s.get("error") or s.get("finish_reason") == "length" for s in r["samples"])}
+    have, _ = already_done(out_path)
+    with out_path.open("a") as f:
+        for i, rec in sorted(keep.items()):
+            if i not in have:
+                f.write(json.dumps(rec, ensure_ascii=False) + "\n")
+    return {"run": old["run_name"], "max_tokens": od["max_tokens"], "copied": len(keep),
+            "asked_again": sorted(set(latest) - set(keep))}
+
+
 def run_generation(examples: list[Example], prompts: dict[int, Prompt], client, endpoint: str,
                    model: str, fmt: str, dec: Decoding, out_path: Path, workers: int) -> None:
     """Append one JSON line per question to out_path. Re-running resumes where it stopped,

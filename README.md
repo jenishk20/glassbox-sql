@@ -14,10 +14,10 @@ one experiment, its results, and the maths behind it.
 
 | Part | Question | The maths | Status |
 |---|---|---|---|
-| 1 | Starting over: how is BIRD scored, and how can a score be wrong? | Accuracy as a proportion; 95% confidence intervals (why about ±2.5 points on 1,534 questions) | writing |
-| 2 | How good are Qwen2.5-Coder-7B Base and Instruct with no training, and how do they fail? | How a model picks each token (softmax, greedy decoding); paired McNemar test | next |
+| 1 | [Understanding the data and the benchmark](https://jenishkothari.pages.dev/understanding-the-data-and-the-benchmark/) | None yet: the data first | published |
+| 2 | How good are Qwen2.5-Coder-7B Base and Instruct, next to frontier models, with and without the evidence hint? | How answers are scored; 95% intervals; softmax and greedy decoding; the McNemar test | writing |
 | 3 | What is each prompt ingredient worth? | Testing each change for significance; repetition penalty as an operation on logits | planned |
-| 4 | How good are frontier models on the same prompt? | Tokens to dollars; cost per correct answer | planned |
+| 4 | How good are frontier models on the best Part 3 prompt? | Tokens to dollars; cost per correct answer | planned |
 | 5 | Supervised fine-tuning (SFT) | Cross-entropy loss; LoRA's low-rank update ΔW = (α/r)·BA | planned |
 | 6 | Distilling reasoning from a larger model | Rejection sampling; distillation as minimising KL divergence | planned |
 | 7 | More samples, better answers: voting and pass@k | Majority-vote probability; pass@k = 1 − C(n−c,k)/C(n,k) | planned |
@@ -99,6 +99,19 @@ uv run python -m glassbox models --endpoint wandb                    # model ids
 uv run python -m glassbox run --endpoint wandb --model <model-id> --limit 5   # 5-question test first
 uv run python -m glassbox run --endpoint wandb --model <model-id>             # the full split
 ```
+
+Reasoning models can run out of tokens before they write any SQL (labelled `truncated`). To give
+those questions a bigger budget without paying for the rest again:
+
+```bash
+uv run python -m glassbox run --endpoint wandb --model <model-id> --max-tokens 65536 --tag max64k \
+    --reuse-from runs/dev/<the 16k run>
+```
+
+This copies every answer that finished and asks again only the ones that were cut off. A bigger budget
+only matters for an answer that hit the limit, so the new folder counts as a full run with the 64k
+budget. `meta.json` lists which questions were asked again. One caveat: APIs are not perfectly
+deterministic even at temperature 0, so a question asked again is a fresh attempt, not a continuation.
 
 ### On your own GPU
 
@@ -210,6 +223,7 @@ Found by running the answer key as if it were a model (`--endpoint gold`), which
 | dev and dev-1106 | 518, 701 | The answer-key SQL takes longer than 30 seconds on a laptop (about 34 s and 177 s), so the same SQL from a model counts as a timeout. Faster correct SQL still scores. |
 | dev-1106 | 1131 | Same: slow answer-key SQL. |
 | dev-1106 | 178 | The answer-key SQL computes a card's age with `julianday('now')`, so the correct answer changes every second. No model can match it. |
+| dev | 1118, 1227, 1257, 1260 | The answer key computes ages from today's date (`'now'`), so the right answer changes as people have birthdays. A model's SQL that matched last week can miss this week (seen on 1118). |
 
 So the highest possible score is 1,532 / 1,534 on dev and 1,530 / 1,534 on dev-1106 for SQL that is as
 slow as the answer key.
