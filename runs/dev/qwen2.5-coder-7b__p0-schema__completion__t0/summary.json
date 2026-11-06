@@ -1,0 +1,84 @@
+{
+  "run": "qwen2.5-coder-7b__p0-schema__completion__t0",
+  "model": "Qwen/Qwen2.5-Coder-7B",
+  "prompt": "p0-schema",
+  "format": "completion",
+  "split": "dev",
+  "decoding": {
+    "temperature": 0.0,
+    "top_p": 1.0,
+    "max_tokens": 1024,
+    "n": 1,
+    "repetition_penalty": null
+  },
+  "complete": true,
+  "n_expected": 1534,
+  "accuracy": {
+    "n": 1534,
+    "correct": 409,
+    "acc": 0.2666232073011734,
+    "ci95": [
+      0.24509745987797793,
+      0.2893149269374131
+    ]
+  },
+  "by_difficulty": {
+    "simple": {
+      "n": 925,
+      "correct": 326,
+      "acc": 0.35243243243243244,
+      "ci95": [
+        0.3223135476551994,
+        0.38377196789449175
+      ]
+    },
+    "moderate": {
+      "n": 464,
+      "correct": 67,
+      "acc": 0.14439655172413793,
+      "ci95": [
+        0.11533208909129405,
+        0.17930096619921454
+      ]
+    },
+    "challenging": {
+      "n": 145,
+      "correct": 16,
+      "acc": 0.1103448275862069,
+      "ci95": [
+        0.0690707412159915,
+        0.17173290507644284
+      ]
+    }
+  },
+  "categories": {
+    "wrong_result": 886,
+    "correct": 409,
+    "sql_error": 236,
+    "timeout": 3
+  },
+  "sql_error_types": {
+    "no such column": 199,
+    "syntax error": 16,
+    "misuse of aggregate function COUNT()": 8,
+    "no such function": 3,
+    "multiple statements": 3,
+    "parser stack overflow": 3,
+    "ambiguous column name": 2,
+    "misuse of aggregate function AVG()": 1,
+    "unrecognized token": 1
+  },
+  "wrong_kinds": {
+    "values": 380,
+    "row_count": 362,
+    "columns": 144
+  },
+  "extracted_by": {
+    "prefilled": 1534
+  },
+  "tokens": {
+    "prompt_tokens": 1052889,
+    "completion_tokens": 77820,
+    "completion_per_question": 50.7
+  }
+}

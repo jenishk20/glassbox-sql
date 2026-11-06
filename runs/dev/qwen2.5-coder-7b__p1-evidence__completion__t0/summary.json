@@ -1,0 +1,85 @@
+{
+  "run": "qwen2.5-coder-7b__p1-evidence__completion__t0",
+  "model": "Qwen/Qwen2.5-Coder-7B",
+  "prompt": "p1-evidence",
+  "format": "completion",
+  "split": "dev",
+  "decoding": {
+    "temperature": 0.0,
+    "top_p": 1.0,
+    "max_tokens": 1024,
+    "n": 1,
+    "repetition_penalty": null
+  },
+  "complete": true,
+  "n_expected": 1534,
+  "accuracy": {
+    "n": 1534,
+    "correct": 587,
+    "acc": 0.38265971316818775,
+    "ci95": [
+      0.358658748730682,
+      0.4072469206178387
+    ]
+  },
+  "by_difficulty": {
+    "simple": {
+      "n": 925,
+      "correct": 451,
+      "acc": 0.4875675675675676,
+      "ci95": [
+        0.45547338908486074,
+        0.5197645847526591
+      ]
+    },
+    "moderate": {
+      "n": 464,
+      "correct": 115,
+      "acc": 0.2478448275862069,
+      "ci95": [
+        0.21073597103420752,
+        0.28909474089906223
+      ]
+    },
+    "challenging": {
+      "n": 145,
+      "correct": 21,
+      "acc": 0.14482758620689656,
+      "ci95": [
+        0.09671747603267106,
+        0.2112716882869815
+      ]
+    }
+  },
+  "categories": {
+    "correct": 587,
+    "wrong_result": 573,
+    "sql_error": 355,
+    "timeout": 19
+  },
+  "sql_error_types": {
+    "no such column": 247,
+    "no such function": 66,
+    "syntax error": 17,
+    "ambiguous column name": 9,
+    "misuse of aggregate function COUNT()": 9,
+    "incomplete input": 2,
+    "misuse of aggregate": 2,
+    "misuse of aggregate function SUM()": 1,
+    "wrong number of arguments to function SUM()": 1,
+    "misuse of aggregate function AVG()": 1
+  },
+  "wrong_kinds": {
+    "values": 240,
+    "row_count": 203,
+    "columns": 130
+  },
+  "extracted_by": {
+    "prefilled": 1534
+  },
+  "tokens": {
+    "prompt_tokens": 1094265,
+    "completion_tokens": 72495,
+    "completion_per_question": 47.3
+  }
+}

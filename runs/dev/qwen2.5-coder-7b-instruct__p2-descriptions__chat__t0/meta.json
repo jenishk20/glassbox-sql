@@ -1,0 +1,44 @@
+{
+  "run_name": "qwen2.5-coder-7b-instruct__p2-descriptions__chat__t0",
+  "created": "2026-10-26T04:23:49+00:00",
+  "model": "Qwen/Qwen2.5-Coder-7B-Instruct",
+  "endpoint": "hf",
+  "base_url": null,
+  "format": "chat",
+  "prompt": "p2-descriptions",
+  "decoding": {
+    "temperature": 0.0,
+    "top_p": 1.0,
+    "max_tokens": 1024,
+    "n": 1,
+    "repetition_penalty": null
+  },
+  "dataset": {
+    "split": "dev",
+    "path": "/scratch/phalle.y/bird_dev/dev_20240627/dev.json",
+    "sha256": "630272f2b1c44d8cef2c3b246f623355cf0bbc1e832c81061df895530dfc2f06",
+    "n": 1534
+  },
+  "limit": null,
+  "tag": null,
+  "harness_version": "0.1.0",
+  "git_commit": "c045a7b",
+  "host": "d4053",
+  "python": "3.8.8",
+  "server": {
+    "engine": "transformers",
+    "transformers": "4.46.3",
+    "torch": "2.4.1+cu121",
+    "gpu": "NVIDIA H200",
+    "batch_size": 16,
+    "generation_config": {
+      "max_new_tokens": 1024,
+      "pad_token_id": 151643,
+      "eos_token_id": [
+        151645,
+        151643
+      ],
+      "transformers_version": "4.46.3"
+    }
+  }
+}

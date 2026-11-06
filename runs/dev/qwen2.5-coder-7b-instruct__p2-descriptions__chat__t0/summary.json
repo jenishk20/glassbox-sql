@@ -1,0 +1,83 @@
+{
+  "run": "qwen2.5-coder-7b-instruct__p2-descriptions__chat__t0",
+  "model": "Qwen/Qwen2.5-Coder-7B-Instruct",
+  "prompt": "p2-descriptions",
+  "format": "chat",
+  "split": "dev",
+  "decoding": {
+    "temperature": 0.0,
+    "top_p": 1.0,
+    "max_tokens": 1024,
+    "n": 1,
+    "repetition_penalty": null
+  },
+  "complete": true,
+  "n_expected": 1534,
+  "accuracy": {
+    "n": 1534,
+    "correct": 772,
+    "acc": 0.5032594524119948,
+    "ci95": [
+      0.47826160866532597,
+      0.5282410116305485
+    ]
+  },
+  "by_difficulty": {
+    "simple": {
+      "n": 925,
+      "correct": 548,
+      "acc": 0.5924324324324325,
+      "ci95": [
+        0.5604465637350459,
+        0.6236537177338289
+      ]
+    },
+    "moderate": {
+      "n": 464,
+      "correct": 179,
+      "acc": 0.3857758620689655,
+      "ci95": [
+        0.34259376610817865,
+        0.4308338213487726
+      ]
+    },
+    "challenging": {
+      "n": 145,
+      "correct": 45,
+      "acc": 0.3103448275862069,
+      "ci95": [
+        0.24075427987389952,
+        0.38972537097640036
+      ]
+    }
+  },
+  "categories": {
+    "correct": 772,
+    "wrong_result": 587,
+    "sql_error": 175
+  },
+  "sql_error_types": {
+    "no such column": 124,
+    "ambiguous column name": 27,
+    "no such function": 10,
+    "syntax error": 7,
+    "misuse of aggregate": 2,
+    "misuse of aggregate function COUNT()": 2,
+    "a GROUP BY clause is required before HAVING": 1,
+    "no such table": 1,
+    "misuse of aggregate function SUM()": 1
+  },
+  "wrong_kinds": {
+    "values": 253,
+    "row_count": 207,
+    "columns": 127
+  },
+  "extracted_by": {
+    "sql_fence": 1534
+  },
+  "tokens": {
+    "prompt_tokens": 2853352,
+    "completion_tokens": 79627,
+    "completion_per_question": 51.9
+  }
+}
