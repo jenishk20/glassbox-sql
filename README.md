@@ -207,6 +207,11 @@ Three deliberate differences, all small:
    which on a laptop marks questions 518 and 701 wrong even when the model's SQL is right.
 3. Results larger than one million rows are cut off and counted wrong (no answer key is anywhere near that).
 
+BIRD's script is handed SQL directly. Here the SQL has to be found in the model's answer: the last
+` ```sql ` block, else the last plain ` ``` ` block, else the whole answer if it is nothing but SQL
+(starts with `SELECT` or `WITH`). Anything else is labelled `no_sql`. Each run's summary shows how
+the SQL was found (`SQL found by`).
+
 `verify-official` runs BIRD's script, unchanged, on a run and prints both numbers:
 
 | Run | glassbox | BIRD's script | Difference |

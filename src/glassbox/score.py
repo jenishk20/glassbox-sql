@@ -27,10 +27,14 @@ from .stats import wilson_interval
 _SQL_FENCE = re.compile(r"```(?:sql|sqlite)\b\s*(.*?)```", re.S | re.I)
 _PLAIN_FENCE = re.compile(r"```[ \t]*\n(.*?)```", re.S)
 _THINK = re.compile(r"<think>.*?</think>", re.S)
+_BARE_SQL = re.compile(r"(?:SELECT|WITH)\b", re.I)
+_USES_NOW = re.compile(r"'now'", re.I)
 
 
 def extract_sql(sample: dict) -> tuple[str, str]:
-    """(sql, how). Takes the LAST sql block, since models often draft before answering."""
+    """(sql, how). Takes the LAST sql block, since models often draft before answering.
+    With no code block at all, an answer that is nothing but SQL (starts with SELECT or WITH)
+    is taken whole; prose with SQL inside it is not guessed at."""
     text = sample.get("text")
     if text is None:
         return "", "none"
@@ -41,6 +45,9 @@ def extract_sql(sample: dict) -> tuple[str, str]:
         blocks = pattern.findall(text)
         if blocks and blocks[-1].strip():
             return blocks[-1].strip(), how
+    text = text.strip()
+    if "```" not in text and _BARE_SQL.match(text):
+        return text, "bare"
     return "", "none"
 
 
@@ -84,12 +91,18 @@ def gold_results(examples: list[Example], bird_dir: Path, sha: str, cache_dir: P
     """Run every gold query once and cache the results, keyed by the split file's hash.
 
     The cache holds plain Python values (no classes), so it survives code changes.
+    A few answer keys use today's date ('now'); their results change over time, so they are
+    run again every time instead of being read from the cache.
     """
     cache = cache_dir / f"gold_{sha[:16]}_{int(timeout)}s.pkl"
     if cache.exists():
         cached = pickle.loads(cache.read_bytes())
         if all(e.idx in cached for e in examples):
-            return {i: ExecResult(**fields) for i, fields in cached.items()}
+            out = {i: ExecResult(**fields) for i, fields in cached.items()}
+            for e in examples:
+                if _USES_NOW.search(e.gold_sql):
+                    out[e.idx] = execute(db_file(bird_dir, e.db_id), e.gold_sql, timeout)
+            return out
     print(f"running {len(examples)} gold queries, up to {timeout:.0f} s each (cached afterwards)...", flush=True)
     with ThreadPoolExecutor(max_workers=workers) as pool:
         res = list(pool.map(lambda e: execute(db_file(bird_dir, e.db_id), e.gold_sql, timeout), examples))

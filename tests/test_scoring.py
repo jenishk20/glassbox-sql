@@ -74,6 +74,9 @@ def test_extract_fallbacks():
     assert extract_sql({"text": "```sql\nSELECT 5"}) == ("", "none")          # unterminated
     assert extract_sql({"text": "SELECT 6\n", "prefilled": True}) == ("SELECT 6", "prefilled")
     assert extract_sql({"text": None, "error": "boom"}) == ("", "none")
+    assert extract_sql({"text": "\nWITH t AS (SELECT 7) SELECT * FROM t\n"}) == (
+        "WITH t AS (SELECT 7) SELECT * FROM t", "bare")                      # SQL with no code block
+    assert extract_sql({"text": "The answer is SELECT 8"}) == ("", "none")   # prose is not guessed at
 
 
 def test_classify_categories(db):

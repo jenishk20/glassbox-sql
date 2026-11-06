@@ -1,6 +1,8 @@
-# Benchmark data and run outputs live outside git.
+# Benchmark data lives outside git. Run folders are committed, except smoke tests
+# (--limit) and the scorer's saved answer-key results.
 data/
-runs/
+runs/.cache/
+runs/*/*limit*/
 logs/
 
 .env
