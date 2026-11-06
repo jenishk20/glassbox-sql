@@ -1,0 +1,75 @@
+{
+  "run": "v1-glm-5.2-cot-imported",
+  "model": "zai-org/GLM-5.2 (v1 saved answers)",
+  "prompt": "v1-frontier-cot",
+  "format": "chat",
+  "split": "dev",
+  "decoding": {
+    "n": 1
+  },
+  "complete": true,
+  "n_expected": 1534,
+  "accuracy": {
+    "n": 1534,
+    "correct": 969,
+    "acc": 0.6316818774445893,
+    "ci95": [
+      0.6072426948161489,
+      0.6554631651371778
+    ]
+  },
+  "by_difficulty": {
+    "simple": {
+      "n": 925,
+      "correct": 652,
+      "acc": 0.7048648648648649,
+      "ci95": [
+        0.6746728585819918,
+        0.7333622681823565
+      ]
+    },
+    "moderate": {
+      "n": 464,
+      "correct": 246,
+      "acc": 0.5301724137931034,
+      "ci95": [
+        0.48469836549816725,
+        0.5751509510226381
+      ]
+    },
+    "challenging": {
+      "n": 145,
+      "correct": 71,
+      "acc": 0.4896551724137931,
+      "ci95": [
+        0.40961148575592443,
+        0.57023285883591
+      ]
+    }
+  },
+  "categories": {
+    "correct": 969,
+    "wrong_result": 514,
+    "no_sql": 31,
+    "sql_error": 19,
+    "timeout": 1
+  },
+  "sql_error_types": {
+    "syntax error": 14,
+    "ambiguous column name": 2,
+    "no such column": 2,
+    "no such function": 1
+  },
+  "wrong_kinds": {
+    "values": 246,
+    "row_count": 178,
+    "columns": 90
+  },
+  "extracted_by": {
+    "sql_fence": 1503,
+    "none": 31
+  },
+  "tokens": {
+    "completion_per_question": 0.0
+  }
+}

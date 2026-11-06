@@ -1,0 +1,28 @@
+{
+  "run_name": "gold__p1-evidence__chat__t0",
+  "created": "2026-10-17T22:08:44+00:00",
+  "model": "gold-sql",
+  "endpoint": "gold",
+  "base_url": null,
+  "format": "chat",
+  "prompt": "p1-evidence",
+  "decoding": {
+    "temperature": 0.0,
+    "top_p": 1.0,
+    "max_tokens": 1024,
+    "n": 1,
+    "repetition_penalty": null
+  },
+  "dataset": {
+    "split": "dev1106",
+    "path": "/private/tmp/claude-501/-Users-jenishkothari-Northeastern-Projects-finetuning-text-to-sql--claude-worktrees-h200-cluster-direction-99c34a/c5f66a94-7ff2-41cd-9b14-ceac80f4c5c0/scratchpad/bird_download_test/dev_20240627/dev_20251106.json",
+    "sha256": "4044d4031f8bacd0647a0e983dbd1c903f3e8f09983225050aae501d4c3cff63",
+    "n": 1534
+  },
+  "limit": null,
+  "tag": null,
+  "harness_version": "0.1.0",
+  "git_commit": "-dirty",
+  "host": "Jenishs-MacBook-Pro.local",
+  "python": "3.12.13"
+}

@@ -1,0 +1,81 @@
+{
+  "run": "nvidia-nemotron-3.5-super-vl-120b-a12b__p0-schema__chat__t0",
+  "model": "nvidia/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B",
+  "prompt": "p0-schema",
+  "format": "chat",
+  "split": "dev",
+  "decoding": {
+    "temperature": 0.0,
+    "top_p": 1.0,
+    "max_tokens": 16384,
+    "n": 1,
+    "repetition_penalty": null
+  },
+  "complete": true,
+  "n_expected": 1534,
+  "accuracy": {
+    "n": 1534,
+    "correct": 553,
+    "acc": 0.3604954367666232,
+    "ci95": [
+      0.33684356513532787,
+      0.38484428620124667
+    ]
+  },
+  "by_difficulty": {
+    "simple": {
+      "n": 925,
+      "correct": 420,
+      "acc": 0.4540540540540541,
+      "ci95": [
+        0.4222240699658924,
+        0.4862640942162459
+      ]
+    },
+    "moderate": {
+      "n": 464,
+      "correct": 103,
+      "acc": 0.22198275862068967,
+      "ci95": [
+        0.1865382014426237,
+        0.2619930963299558
+      ]
+    },
+    "challenging": {
+      "n": 145,
+      "correct": 30,
+      "acc": 0.20689655172413793,
+      "ci95": [
+        0.14894514037451861,
+        0.2799779563941267
+      ]
+    }
+  },
+  "categories": {
+    "wrong_result": 969,
+    "correct": 553,
+    "timeout": 5,
+    "sql_error": 4,
+    "truncated": 3
+  },
+  "sql_error_types": {
+    "no such column": 2,
+    "syntax error": 1,
+    "circular reference": 1
+  },
+  "wrong_kinds": {
+    "values": 430,
+    "row_count": 360,
+    "columns": 179
+  },
+  "extracted_by": {
+    "sql_fence": 1475,
+    "bare": 56,
+    "none": 3
+  },
+  "tokens": {
+    "prompt_tokens": 1167734,
+    "completion_tokens": 1171454,
+    "completion_per_question": 763.7
+  }
+}

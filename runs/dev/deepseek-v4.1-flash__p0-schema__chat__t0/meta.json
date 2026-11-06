@@ -1,0 +1,31 @@
+{
+  "run_name": "deepseek-v4.1-flash__p0-schema__chat__t0",
+  "created": "2026-10-25T17:19:54+00:00",
+  "model": "deepseek-ai/DeepSeek-V4.1-Flash",
+  "endpoint": "wandb",
+  "base_url": "https://api.inference.wandb.ai/v1",
+  "format": "chat",
+  "prompt": "p0-schema",
+  "decoding": {
+    "temperature": 0.0,
+    "top_p": 1.0,
+    "max_tokens": 16384,
+    "n": 1,
+    "repetition_penalty": null
+  },
+  "dataset": {
+    "split": "dev",
+    "path": "/Users/jenishkothari/Northeastern/Projects/finetuning-text-to-sql/data/bird_data/dev.json",
+    "sha256": "630272f2b1c44d8cef2c3b246f623355cf0bbc1e832c81061df895530dfc2f06",
+    "n": 1534
+  },
+  "limit": null,
+  "tag": null,
+  "harness_version": "0.1.0",
+  "git_commit": "53e1399-dirty",
+  "host": "Jenishs-MacBook-Pro.local",
+  "python": "3.12.13",
+  "server": {
+    "models": null
+  }
+}

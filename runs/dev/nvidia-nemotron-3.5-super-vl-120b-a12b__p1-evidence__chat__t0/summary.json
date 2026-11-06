@@ -1,0 +1,80 @@
+{
+  "run": "nvidia-nemotron-3.5-super-vl-120b-a12b__p1-evidence__chat__t0",
+  "model": "nvidia/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B",
+  "prompt": "p1-evidence",
+  "format": "chat",
+  "split": "dev",
+  "decoding": {
+    "temperature": 0.0,
+    "top_p": 1.0,
+    "max_tokens": 16384,
+    "n": 1,
+    "repetition_penalty": null
+  },
+  "complete": true,
+  "n_expected": 1534,
+  "accuracy": {
+    "n": 1534,
+    "correct": 860,
+    "acc": 0.560625814863103,
+    "ci95": [
+      0.5356680581588679,
+      0.5852806793443964
+    ]
+  },
+  "by_difficulty": {
+    "simple": {
+      "n": 925,
+      "correct": 588,
+      "acc": 0.6356756756756756,
+      "ci95": [
+        0.6041604116229089,
+        0.6660686564980709
+      ]
+    },
+    "moderate": {
+      "n": 464,
+      "correct": 213,
+      "acc": 0.45905172413793105,
+      "ci95": [
+        0.4142307253911572,
+        0.5045452021877499
+      ]
+    },
+    "challenging": {
+      "n": 145,
+      "correct": 59,
+      "acc": 0.4068965517241379,
+      "ci95": [
+        0.330340421565979,
+        0.4882586797605317
+      ]
+    }
+  },
+  "categories": {
+    "correct": 860,
+    "wrong_result": 662,
+    "sql_error": 9,
+    "timeout": 2,
+    "truncated": 1
+  },
+  "sql_error_types": {
+    "no such function": 8,
+    "ORDER BY clause should come after UNION ALL not before": 1
+  },
+  "wrong_kinds": {
+    "values": 284,
+    "row_count": 200,
+    "columns": 178
+  },
+  "extracted_by": {
+    "sql_fence": 1480,
+    "bare": 53,
+    "none": 1
+  },
+  "tokens": {
+    "prompt_tokens": 1211364,
+    "completion_tokens": 890100,
+    "completion_per_question": 580.2
+  }
+}

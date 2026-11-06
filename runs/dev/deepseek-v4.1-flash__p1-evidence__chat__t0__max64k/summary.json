@@ -1,0 +1,75 @@
+{
+  "run": "deepseek-v4.1-flash__p1-evidence__chat__t0__max64k",
+  "model": "deepseek-ai/DeepSeek-V4.1-Flash",
+  "prompt": "p1-evidence",
+  "format": "chat",
+  "split": "dev",
+  "decoding": {
+    "temperature": 0.0,
+    "top_p": 1.0,
+    "max_tokens": 65536,
+    "n": 1,
+    "repetition_penalty": null
+  },
+  "complete": true,
+  "n_expected": 1534,
+  "accuracy": {
+    "n": 1534,
+    "correct": 954,
+    "acc": 0.621903520208605,
+    "ci95": [
+      0.5973609665328924,
+      0.6458370325328112
+    ]
+  },
+  "by_difficulty": {
+    "simple": {
+      "n": 925,
+      "correct": 635,
+      "acc": 0.6864864864864865,
+      "ci95": [
+        0.6558699996148464,
+        0.7155603928223572
+      ]
+    },
+    "moderate": {
+      "n": 464,
+      "correct": 247,
+      "acc": 0.5323275862068966,
+      "ci95": [
+        0.48684797027661614,
+        0.5772762974242467
+      ]
+    },
+    "challenging": {
+      "n": 145,
+      "correct": 72,
+      "acc": 0.496551724137931,
+      "ci95": [
+        0.41631514799793,
+        0.5769663001993481
+      ]
+    }
+  },
+  "categories": {
+    "correct": 954,
+    "wrong_result": 573,
+    "truncated": 6,
+    "timeout": 1
+  },
+  "sql_error_types": {},
+  "wrong_kinds": {
+    "values": 280,
+    "row_count": 181,
+    "columns": 112
+  },
+  "extracted_by": {
+    "sql_fence": 1528,
+    "none": 6
+  },
+  "tokens": {
+    "prompt_tokens": 1142520,
+    "completion_tokens": 1945524,
+    "completion_per_question": 1268.3
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "run": "beam-1.0-501b-a23b__p1-evidence__chat__t0",
+  "model": "reflection/Beam-1.0-501B-A23B",
+  "prompt": "p1-evidence",
+  "format": "chat",
+  "split": "dev",
+  "decoding": {
+    "temperature": 0.0,
+    "top_p": 1.0,
+    "max_tokens": 16384,
+    "n": 1,
+    "repetition_penalty": null
+  },
+  "complete": true,
+  "n_expected": 1534,
+  "accuracy": {
+    "n": 1534,
+    "correct": 975,
+    "acc": 0.635593220338983,
+    "ci95": [
+      0.6111983492248279,
+      0.6593106550835481
+    ]
+  },
+  "by_difficulty": {
+    "simple": {
+      "n": 925,
+      "correct": 651,
+      "acc": 0.7037837837837838,
+      "ci95": [
+        0.6735652610084856,
+        0.7323166460895602
+      ]
+    },
+    "moderate": {
+      "n": 464,
+      "correct": 256,
+      "acc": 0.5517241379310345,
+      "ci95": [
+        0.5062323144529783,
+        0.5963665138684022
+      ]
+    },
+    "challenging": {
+      "n": 145,
+      "correct": 68,
+      "acc": 0.4689655172413793,
+      "ci95": [
+        0.3895899608251937,
+        0.5499430729503098
+      ]
+    }
+  },
+  "categories": {
+    "correct": 975,
+    "wrong_result": 552,
+    "sql_error": 7
+  },
+  "sql_error_types": {
+    "no such function": 6,
+    "malformed JSON": 1
+  },
+  "wrong_kinds": {
+    "values": 269,
+    "row_count": 177,
+    "columns": 106
+  },
+  "extracted_by": {
+    "sql_fence": 1534
+  },
+  "tokens": {
+    "prompt_tokens": 1160227,
+    "completion_tokens": 1810227,
+    "completion_per_question": 1180.1
+  }
+}

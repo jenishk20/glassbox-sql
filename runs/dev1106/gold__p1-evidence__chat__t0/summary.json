@@ -1,0 +1,71 @@
+{
+  "run": "gold__p1-evidence__chat__t0",
+  "model": "gold-sql",
+  "prompt": "p1-evidence",
+  "format": "chat",
+  "split": "dev1106",
+  "decoding": {
+    "temperature": 0.0,
+    "top_p": 1.0,
+    "max_tokens": 1024,
+    "n": 1,
+    "repetition_penalty": null
+  },
+  "complete": true,
+  "n_expected": 1534,
+  "accuracy": {
+    "n": 1534,
+    "correct": 1530,
+    "acc": 0.9973924380704041,
+    "ci95": [
+      0.9933143235382887,
+      0.9989855336121486
+    ]
+  },
+  "by_difficulty": {
+    "simple": {
+      "n": 860,
+      "correct": 859,
+      "acc": 0.9988372093023256,
+      "ci95": [
+        0.9934429344516973,
+        0.9997947146728643
+      ]
+    },
+    "moderate": {
+      "n": 443,
+      "correct": 442,
+      "acc": 0.9977426636568849,
+      "ci95": [
+        0.9873254872500569,
+        0.9996014237627048
+      ]
+    },
+    "challenging": {
+      "n": 231,
+      "correct": 229,
+      "acc": 0.9913419913419913,
+      "ci95": [
+        0.9689864908601318,
+        0.9976224915348102
+      ]
+    }
+  },
+  "categories": {
+    "correct": 1530,
+    "timeout": 3,
+    "wrong_result": 1
+  },
+  "sql_error_types": {},
+  "wrong_kinds": {
+    "values": 1
+  },
+  "extracted_by": {
+    "sql_fence": 1534
+  },
+  "tokens": {
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "completion_per_question": 0.0
+  }
+}

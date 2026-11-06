@@ -1,0 +1,14 @@
+{
+  "glassbox": {
+    "simple": 70.48648648648648,
+    "moderate": 53.01724137931034,
+    "challenging": 48.96551724137931,
+    "total": 63.168187744458926
+  },
+  "official": {
+    "simple": 70.49,
+    "moderate": 52.8,
+    "challenging": 48.28,
+    "total": 63.04
+  }
+}
