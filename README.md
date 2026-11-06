@@ -7,15 +7,15 @@ Every number in the series comes from a run folder you can open: the exact promp
 answer, the SQL it wrote, whether that SQL returned the right rows, and why not when it failed. The
 scorer agrees with BIRD's own evaluation script (see [How scoring works](#how-scoring-works)).
 
-The series is written up at [jenishkothari.pages.dev](https://jenishkothari.pages.dev/). Each part has
-one experiment, its results, and the maths behind it.
+The series is written up as [Post-Training 101](https://jenishkothari.pages.dev/post-training-101/).
+Each part has one experiment, its results, and the maths behind it.
 
 ## The series
 
 | Part | Question | The maths | Status |
 |---|---|---|---|
 | 1 | [Understanding the data and the benchmark](https://jenishkothari.pages.dev/understanding-the-data-and-the-benchmark/) | None yet: the data first | published |
-| 2 | How good are Qwen2.5-Coder-7B Base and Instruct, next to frontier models, with and without the evidence hint? | How answers are scored; 95% intervals; softmax and greedy decoding; the McNemar test | writing |
+| 2 | [The starting line: a 7B against the frontier](https://jenishkothari.pages.dev/the-starting-line/) | How answers are scored; the 95% Wilson interval | published |
 | 3 | What is each prompt ingredient worth? | Testing each change for significance; repetition penalty as an operation on logits | planned |
 | 4 | How good are frontier models on the best Part 3 prompt? | Tokens to dollars; cost per correct answer | planned |
 | 5 | Supervised fine-tuning (SFT) | Cross-entropy loss; LoRA's low-rank update ΔW = (α/r)·BA | planned |
@@ -24,6 +24,22 @@ one experiment, its results, and the maths behind it.
 | 8 | Direct Preference Optimization (DPO) | Bradley-Terry model; deriving the DPO loss | planned |
 | 9 | Reinforcement learning with GRPO | Policy gradient; group-relative advantage; why binary rewards saturate | planned |
 | 10 | The final exam: BIRD hidden test set | What carries over from dev to test | planned |
+
+## Results so far
+
+**Part 2:** every model as it comes, one greedy answer per question, on all 1,534 BIRD dev questions,
+without and with BIRD's evidence hint. Each number links to the run folder it comes from.
+
+| Model | Without the hint | With the hint |
+|---|---|---|
+| Beam 1.0 (501B, 23B active) | [50.0%](runs/dev/beam-1.0-501b-a23b__p0-schema__chat__t0) | [63.6%](runs/dev/beam-1.0-501b-a23b__p1-evidence__chat__t0) |
+| DeepSeek V4.1-Flash | [46.9%](runs/dev/deepseek-v4.1-flash__p0-schema__chat__t0__max64k) | [62.2%](runs/dev/deepseek-v4.1-flash__p1-evidence__chat__t0__max64k) |
+| Nemotron 3.5 Super (120B, 12B active) | [36.0%](runs/dev/nvidia-nemotron-3.5-super-vl-120b-a12b__p0-schema__chat__t0) | [56.1%](runs/dev/nvidia-nemotron-3.5-super-vl-120b-a12b__p1-evidence__chat__t0) |
+| Qwen2.5-Coder-7B-Instruct | [32.4%](runs/dev/qwen2.5-coder-7b-instruct__p0-schema__chat__t0) | [49.8%](runs/dev/qwen2.5-coder-7b-instruct__p1-evidence__chat__t0) |
+| Qwen2.5-Coder-7B (base) | [26.7%](runs/dev/qwen2.5-coder-7b__p0-schema__completion__t0) | [38.7%](runs/dev/qwen2.5-coder-7b__p1-evidence__completion__t0) |
+
+Every score is good to about ±2.5 points (95% Wilson interval). DeepSeek got up to 65,536 tokens per
+answer; its folders without `max64k` are the first run at 16,384, which cut off 52 answers.
 
 Rules every part follows:
 
