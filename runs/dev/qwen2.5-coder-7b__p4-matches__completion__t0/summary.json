@@ -15,11 +15,11 @@
   "n_expected": 1534,
   "accuracy": {
     "n": 1534,
-    "correct": 624,
-    "acc": 0.4067796610169492,
+    "correct": 626,
+    "acc": 0.40808344198174706,
     "ci95": [
-      0.38245936750693427,
-      0.43156569203105716
+      0.3837476463572506,
+      0.4328784612990905
     ]
   },
   "by_difficulty": {
@@ -34,32 +34,32 @@
     },
     "moderate": {
       "n": 464,
-      "correct": 124,
-      "acc": 0.2672413793103448,
+      "correct": 125,
+      "acc": 0.26939655172413796,
       "ci95": [
-        0.22900761261843272,
-        0.30929765993535463
+        0.23104392411908586,
+        0.3115362996147591
       ]
     },
     "challenging": {
       "n": 145,
-      "correct": 24,
-      "acc": 0.16551724137931034,
+      "correct": 25,
+      "acc": 0.1724137931034483,
       "ci95": [
-        0.11382248778254253,
-        0.23447798735344097
+        0.11959690383831326,
+        0.2421406749031139
       ]
     }
   },
   "categories": {
-    "correct": 624,
-    "wrong_result": 539,
-    "sql_error": 370,
-    "timeout": 1
+    "correct": 626,
+    "wrong_result": 540,
+    "sql_error": 366,
+    "timeout": 2
   },
   "sql_error_types": {
-    "no such column": 275,
-    "no such function": 50,
+    "no such column": 272,
+    "no such function": 49,
     "ambiguous column name": 15,
     "syntax error": 13,
     "misuse of aggregate function COUNT()": 9,
@@ -70,9 +70,9 @@
     "misuse of aggregate function AVG()": 1
   },
   "wrong_kinds": {
-    "values": 210,
-    "row_count": 182,
-    "columns": 147
+    "values": 209,
+    "row_count": 183,
+    "columns": 148
   },
   "extracted_by": {
     "prefilled": 1534

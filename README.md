@@ -5,7 +5,7 @@ turning English questions into SQL, measured on the [BIRD](https://bird-bench.gi
 
 Every number in the series comes from a run folder you can open: the exact prompt, the model's full
 answer, the SQL it wrote, whether that SQL returned the right rows, and why not when it failed. The
-scorer is checked against BIRD's own evaluation script on every published run.
+scorer agrees with BIRD's own evaluation script (see [How scoring works](#how-scoring-works)).
 
 The series is written up at [jenishkothari.pages.dev](https://jenishkothari.pages.dev/). Each part has
 one experiment, its results, and the maths behind it.

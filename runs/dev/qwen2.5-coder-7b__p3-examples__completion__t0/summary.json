@@ -15,11 +15,11 @@
   "n_expected": 1534,
   "accuracy": {
     "n": 1534,
-    "correct": 628,
-    "acc": 0.409387222946545,
+    "correct": 630,
+    "acc": 0.4106910039113429,
     "ci95": [
-      0.38503610364792656,
-      0.4341910521267644
+      0.38632473911626325,
+      0.4355034647767774
     ]
   },
   "by_difficulty": {
@@ -34,32 +34,32 @@
     },
     "moderate": {
       "n": 464,
-      "correct": 132,
-      "acc": 0.28448275862068967,
+      "correct": 133,
+      "acc": 0.28663793103448276,
       "ci95": [
-        0.24533097635458673,
-        0.3271739056396609
+        0.24737658036922147,
+        0.3294032528050837
       ]
     },
     "challenging": {
       "n": 145,
-      "correct": 18,
-      "acc": 0.12413793103448276,
+      "correct": 19,
+      "acc": 0.1310344827586207,
       "ci95": [
-        0.0799838420524927,
-        0.18769401145082892
+        0.08551633457290873,
+        0.19559862253585658
       ]
     }
   },
   "categories": {
-    "correct": 628,
-    "wrong_result": 519,
-    "sql_error": 384,
+    "correct": 630,
+    "wrong_result": 521,
+    "sql_error": 380,
     "timeout": 3
   },
   "sql_error_types": {
-    "no such column": 293,
-    "no such function": 44,
+    "no such column": 290,
+    "no such function": 43,
     "ambiguous column name": 15,
     "syntax error": 12,
     "misuse of aggregate function COUNT()": 12,
@@ -72,8 +72,8 @@
   },
   "wrong_kinds": {
     "values": 211,
-    "row_count": 166,
-    "columns": 142
+    "row_count": 167,
+    "columns": 143
   },
   "extracted_by": {
     "prefilled": 1534

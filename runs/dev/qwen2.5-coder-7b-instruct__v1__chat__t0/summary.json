@@ -15,63 +15,63 @@
   "n_expected": 1534,
   "accuracy": {
     "n": 1534,
-    "correct": 217,
-    "acc": 0.14146023468057367,
+    "correct": 810,
+    "acc": 0.5280312907431551,
     "ci95": [
-      0.12491489632512223,
-      0.15979687112869093
+      0.5030102410763146,
+      0.5529122934682054
     ]
   },
   "by_difficulty": {
     "simple": {
       "n": 925,
-      "correct": 142,
-      "acc": 0.1535135135135135,
+      "correct": 563,
+      "acc": 0.6086486486486486,
       "ci95": [
-        0.13171935699302847,
-        0.1781737399569789
+        0.5768089138075951,
+        0.6395896626558191
       ]
     },
     "moderate": {
       "n": 464,
-      "correct": 56,
-      "acc": 0.1206896551724138,
+      "correct": 202,
+      "acc": 0.4353448275862069,
       "ci95": [
-        0.09412068114567251,
-        0.15348791116420335
+        0.39094481108970686,
+        0.4808066535085675
       ]
     },
     "challenging": {
       "n": 145,
-      "correct": 19,
-      "acc": 0.1310344827586207,
+      "correct": 45,
+      "acc": 0.3103448275862069,
       "ci95": [
-        0.08551633457290873,
-        0.19559862253585658
+        0.24075427987389952,
+        0.38972537097640036
       ]
     }
   },
   "categories": {
-    "no_sql": 1035,
-    "correct": 217,
-    "wrong_result": 214,
-    "sql_error": 68
+    "correct": 810,
+    "wrong_result": 581,
+    "sql_error": 143
   },
   "sql_error_types": {
-    "no such column": 58,
+    "no such column": 124,
+    "no such function": 9,
     "no such table": 3,
-    "no such function": 3,
     "syntax error": 2,
-    "ambiguous column name": 1,
+    "misuse of aggregate function COUNT()": 2,
+    "ambiguous column name": 2,
     "misuse of aggregate": 1
   },
   "wrong_kinds": {
-    "values": 104,
-    "row_count": 72,
-    "columns": 38
+    "values": 278,
+    "row_count": 228,
+    "columns": 75
   },
   "extracted_by": {
-    "none": 1035,
+    "bare": 1035,
     "sql_fence": 499
   },
   "tokens": {

@@ -15,11 +15,11 @@
   "n_expected": 1534,
   "accuracy": {
     "n": 1534,
-    "correct": 772,
-    "acc": 0.5032594524119948,
+    "correct": 774,
+    "acc": 0.5045632333767927,
     "ci95": [
-      0.47826160866532597,
-      0.5282410116305485
+      0.4795626412212372,
+      0.5295410271929868
     ]
   },
   "by_difficulty": {
@@ -34,26 +34,26 @@
     },
     "moderate": {
       "n": 464,
-      "correct": 179,
-      "acc": 0.3857758620689655,
+      "correct": 180,
+      "acc": 0.3879310344827586,
       "ci95": [
-        0.34259376610817865,
-        0.4308338213487726
+        0.34468625349442045,
+        0.43301628514258833
       ]
     },
     "challenging": {
       "n": 145,
-      "correct": 45,
-      "acc": 0.3103448275862069,
+      "correct": 46,
+      "acc": 0.31724137931034485,
       "ci95": [
-        0.24075427987389952,
-        0.38972537097640036
+        0.24704058770171988,
+        0.3968761667540236
       ]
     }
   },
   "categories": {
-    "correct": 772,
-    "wrong_result": 587,
+    "correct": 774,
+    "wrong_result": 585,
     "sql_error": 175
   },
   "sql_error_types": {
@@ -63,12 +63,12 @@
     "syntax error": 7,
     "misuse of aggregate": 2,
     "misuse of aggregate function COUNT()": 2,
-    "a GROUP BY clause is required before HAVING": 1,
+    "HAVING clause on a non-aggregate query": 1,
     "no such table": 1,
     "misuse of aggregate function SUM()": 1
   },
   "wrong_kinds": {
-    "values": 253,
+    "values": 251,
     "row_count": 207,
     "columns": 127
   },

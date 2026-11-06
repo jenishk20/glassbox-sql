@@ -52,25 +52,25 @@
     }
   },
   "categories": {
-    "wrong_result": 886,
+    "wrong_result": 888,
     "correct": 409,
-    "sql_error": 236,
-    "timeout": 3
+    "sql_error": 233,
+    "timeout": 4
   },
   "sql_error_types": {
-    "no such column": 199,
+    "no such column": 196,
     "syntax error": 16,
     "misuse of aggregate function COUNT()": 8,
     "no such function": 3,
     "multiple statements": 3,
-    "parser stack overflow": 3,
+    "incomplete input": 3,
     "ambiguous column name": 2,
     "misuse of aggregate function AVG()": 1,
     "unrecognized token": 1
   },
   "wrong_kinds": {
-    "values": 380,
-    "row_count": 362,
+    "values": 381,
+    "row_count": 363,
     "columns": 144
   },
   "extracted_by": {

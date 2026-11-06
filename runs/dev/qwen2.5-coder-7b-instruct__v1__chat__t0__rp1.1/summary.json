@@ -15,65 +15,65 @@
   "n_expected": 1534,
   "accuracy": {
     "n": 1534,
-    "correct": 214,
-    "acc": 0.1395045632333768,
+    "correct": 800,
+    "acc": 0.5215123859191656,
     "ci95": [
-      0.12306485335324654,
-      0.157745341923042
+      0.49649149879695237,
+      0.546425795155819
     ]
   },
   "by_difficulty": {
     "simple": {
       "n": 925,
-      "correct": 145,
-      "acc": 0.15675675675675677,
+      "correct": 563,
+      "acc": 0.6086486486486486,
       "ci95": [
-        0.1347516897754721,
-        0.1816010661734432
+        0.5768089138075951,
+        0.6395896626558191
       ]
     },
     "moderate": {
       "n": 464,
-      "correct": 54,
-      "acc": 0.11637931034482758,
+      "correct": 191,
+      "acc": 0.41163793103448276,
       "ci95": [
-        0.09030032142609205,
-        0.14875836852366875
+        0.3677625460912174,
+        0.4569644555264242
       ]
     },
     "challenging": {
       "n": 145,
-      "correct": 15,
-      "acc": 0.10344827586206896,
+      "correct": 46,
+      "acc": 0.31724137931034485,
       "ci95": [
-        0.06369780166344452,
-        0.16366874102354617
+        0.24704058770171988,
+        0.3968761667540236
       ]
     }
   },
   "categories": {
-    "no_sql": 1035,
-    "correct": 214,
-    "wrong_result": 199,
-    "sql_error": 84,
-    "timeout": 2
+    "correct": 800,
+    "wrong_result": 555,
+    "sql_error": 179
   },
   "sql_error_types": {
-    "no such column": 72,
+    "no such column": 158,
+    "no such function": 7,
+    "no such table": 4,
     "syntax error": 3,
-    "no such table": 3,
+    "misuse of aggregate function COUNT()": 2,
     "ambiguous column name": 2,
-    "no such function": 2,
     "misuse of aggregate function AVG()": 1,
-    "misuse of aggregate": 1
+    "misuse of aggregate": 1,
+    "misuse of aliased aggregate ValueForMoneyGasStations": 1
   },
   "wrong_kinds": {
-    "values": 100,
-    "row_count": 66,
-    "columns": 33
+    "values": 276,
+    "row_count": 214,
+    "columns": 65
   },
   "extracted_by": {
-    "none": 1035,
+    "bare": 1035,
     "sql_fence": 499
   },
   "tokens": {
